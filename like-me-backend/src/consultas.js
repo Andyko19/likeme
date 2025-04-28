@@ -22,4 +22,27 @@ const agregarPost = async (titulo, img, descripcion, likes) => {
   await pool.query(consulta, values);
 };
 
-module.exports = { obtenerPosts, agregarPost };
+// Función PUT: aumentar los likes de un post
+const aumentarLikes = async (id) => {
+  const consulta =
+    "UPDATE posts SET likes = likes + 1 WHERE id = $1 RETURNING *";
+  const values = [id];
+  const { rows } = await pool.query(consulta, values);
+  return rows[0];
+};
+
+// Función DELETE: eliminar un post
+const eliminarPost = async (id) => {
+  const consulta = "DELETE FROM posts WHERE id = $1 RETURNING *";
+  const values = [id];
+  const { rows } = await pool.query(consulta, values);
+  return rows[0];
+};
+
+// Exportar las funciones
+module.exports = {
+  obtenerPosts,
+  agregarPost,
+  aumentarLikes,
+  eliminarPost,
+};
